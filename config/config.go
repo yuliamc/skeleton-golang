@@ -33,17 +33,17 @@ var Config = struct {
 	}
 
 	System struct {
-		AppServer string `env:"SYSTEM_SERVER" envDefault:"127.0.0.1"`
-		AppAddr   string `env:"SYSTEM_ADDR" envDefault:":7000"`
-		Mode      string `env:"SYSTEM_MODE" envDefault:"debug"`
-		TimeZone  string `env:"SYSTEM_TIME_ZONE" envDefault:"Asia/Jakarta"`
+		AppServer  string `env:"SYSTEM_SERVER" envDefault:"127.0.0.1"`
+		AppAddr    string `env:"SYSTEM_ADDR" envDefault:":7000"`
+		Mode       string `env:"SYSTEM_MODE" envDefault:"debug"`
+		TimeZone   string `env:"SYSTEM_TIME_ZONE" envDefault:"Asia/Jakarta"`
+		LocalePath string `env:"SYSTEM_LOCALE_PATH" envDefault:"cmd/apiserver/app/locale/"`
 	}
 
-	APIServer struct {
-		LocalePath string `env:"APISERVER_LOCALE_PATH" envDefault:"cmd/apiserver/app/locale/"`
+	SecretKey struct {
+		AESCryptKey  string `env:"AES_CRYPT_KEY" envDefault:"5fcff2ecb09d48eeb4fd2cb713b6b860"`
+		StaticApiKey string `env:"STATIC_API_KEY" envDefault:"static-api-key"`
 	}
-
-	AESCryptKey string `env:"AES_CRYPT_KEY" envDefault:"5fcff2ecb09d48eeb4fd2cb713b6b860"`
 }{}
 
 // Init initialize config
