@@ -10,12 +10,6 @@ type Creator struct {
 	PhoneNumber string `json:"phone_number"`
 }
 
-//todo: harus di satuin creator sama accessor, jadiin global
-type Accessor struct {
-	ID        uint
-	PartnerID uint
-}
-
 // Key value pair struct
 type KeyValue struct {
 	Key   string `json:"key"`
@@ -24,6 +18,7 @@ type KeyValue struct {
 
 type ReserveErrorCode int
 type ReserveErrorMessage int
+type ReserveMessageCode int
 
 type ErrorDetails struct {
 	Key   string      `json:"key"`

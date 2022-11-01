@@ -13,13 +13,15 @@ const (
 	ERROR_MSG_NULL constant.ReserveErrorMessage = iota + 1000
 	ERROR_MSG_UNAUTHORIZED_REQUEST
 	ERROR_MSG_INTERNAL_SERVER_ERROR
+	ERROR_MSG_DATA_NOT_FOUND
 )
 
 // ERROR_KEYS translate error code to i18n key, determine http status code and error code shown to client
 var ERROR_KEYS = map[constant.ReserveErrorMessage]ErrorData{
-	ERROR_MSG_NULL:                  *NewErrorData("NULL", http.StatusBadRequest, ERROR_CODE_NULL),
-	ERROR_MSG_UNAUTHORIZED_REQUEST:  *NewErrorData("UNAUTHORIZED_REQUEST", http.StatusUnauthorized, ERROR_CODE_VALIDATION),
-	ERROR_MSG_INTERNAL_SERVER_ERROR: *NewErrorData("INTERNAL_SERVER_ERROR", http.StatusUnauthorized, ERROR_CODE_INTERNAL_SERVER_ERROR),
+	ERROR_MSG_NULL:                  *NewErrorData("ERROR_MSG_NULL", http.StatusBadRequest, ERROR_CODE_NULL),
+	ERROR_MSG_UNAUTHORIZED_REQUEST:  *NewErrorData("ERROR_MSG_UNAUTHORIZED_REQUEST", http.StatusUnauthorized, ERROR_CODE_VALIDATION),
+	ERROR_MSG_INTERNAL_SERVER_ERROR: *NewErrorData("ERROR_MSG_INTERNAL_SERVER_ERROR", http.StatusUnauthorized, ERROR_CODE_INTERNAL_SERVER_ERROR),
+	ERROR_MSG_DATA_NOT_FOUND:        *NewErrorData("ERROR_MSG_DATA_NOT_FOUND", http.StatusNotFound, ERROR_CODE_GENERAL),
 }
 
 type ErrorData struct {
@@ -42,15 +44,15 @@ func NewErrorData(messageKey string, httpCode int, errorCode constant.ReserveErr
 // ERROR_ is reserved key for error code
 const (
 	//
-	ERROR_CODE_NULL constant.ReserveErrorCode = 0
-
+	ERROR_CODE_NULL    constant.ReserveErrorCode = 0
 	ERROR_CODE_UNKNOWN constant.ReserveErrorCode = 1
 
 	//
 	ERROR_CODE_INTERNAL_SERVER_ERROR = 5000
 
 	//
-	ERROR_CODE_VALIDATION constant.ReserveErrorCode = iota + 4000
+	ERROR_CODE_GENERAL constant.ReserveErrorCode = iota + 1000
+	ERROR_CODE_VALIDATION
 )
 
 var (
