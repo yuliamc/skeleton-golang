@@ -7,5 +7,5 @@ import (
 )
 
 func initApplicationRoute(group *gin.RouterGroup) {
-	group.GET("/application/partner/:id", store.PartnerHandler.FindByID)
+	group.GET("/application/partner-detail/:id", store.PartnerHandler.GetByID)
 }

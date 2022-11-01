@@ -11,8 +11,6 @@ func Random(n int) int {
 	return rand.Intn(n)
 }
 
-// Convert string to uint.
-// @TODO Bener gak nih disini?
 func ConvertStringToUint(s string) (uint, error) {
 	temp, err := strconv.ParseUint(s, 10, 32)
 	if err != nil {

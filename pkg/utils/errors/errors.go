@@ -3,7 +3,6 @@ package errors
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -18,124 +17,9 @@ import (
 	"modalrakyat/skeleton-golang/pkg/utils/constant"
 )
 
-// E messageCode refers to errors/code.go enum iota of "Code represent error"
-// Deprecated: use NewE instead
-func E(ctx *gin.Context, httpCode int, messageCode int, err error) {
-	ctx.Status(httpCode)
-	if err != nil {
-		ctx.Errors = append(ctx.Errors, &gin.Error{Err: err})
-	}
-
-	// Overrides the error from the service will be displayed on response.
-	genericError, genericErrorOk := err.(*GenericError)
-	if !genericErrorOk {
-		ctx.JSON(http.StatusInternalServerError, api.Error{
-			Message: "Internal Server Error",
-			Code:    ERROR_CODE_INTERNAL_SERVER_ERROR,
-			Details: []constant.ErrorDetails{
-				{Key: "error", Value: err.Error()},
-			},
-		})
-	} else {
-		messageCode = genericError.GetCode()
-		parsedMessageCode := constant.ReserveErrorMessage(messageCode)
-		messageKey := ERROR_KEYS[parsedMessageCode].MessageKey
-		errorCode := ERROR_KEYS[parsedMessageCode].ErrorCode
-
-		T, ok := ctx.Get("T")
-		if ok {
-			translator, ok := T.(func(string) (string, error))
-
-			if ok {
-				translatedMessage, err := translator(messageKey)
-				if err == nil && len(translatedMessage) > 0 {
-					if genericErrorOk && genericError.fn != nil {
-						// Transforms the message for custom message.
-						translatedMessage = genericError.fn(translatedMessage)
-					}
-
-					ctx.JSON(httpCode, api.Error{Message: translatedMessage, Code: errorCode, Details: genericError.GetDetails()})
-				} else {
-					if genericErrorOk && genericError.fn != nil {
-						// Transforms the message for custom message.
-						translatedMessage = genericError.fn(translatedMessage)
-						ctx.JSON(httpCode, api.Error{Message: translatedMessage, Code: errorCode, Details: genericError.GetDetails()})
-					} else {
-						ctx.JSON(httpCode, api.Error{Message: fmt.Sprintf("error code: %s", strconv.Itoa(messageCode)), Code: errorCode, Details: genericError.GetDetails()})
-					}
-				}
-			} else {
-				ctx.JSON(httpCode, api.Error{Message: fmt.Sprintf("error code: %s", strconv.Itoa(messageCode)), Code: errorCode, Details: genericError.GetDetails()})
-			}
-		} else {
-			ctx.JSON(httpCode, api.Error{Message: fmt.Sprintf("error code: %s", strconv.Itoa(messageCode)), Code: errorCode, Details: genericError.GetDetails()})
-		}
-	}
-
-	ctx.Abort()
-}
-
-// ErrorCode messageCode refers to errors/code.go enum iota of "Code represent error"
-// Deprecated: use NewErrorCode instead
-func ErrorCode(ctx *gin.Context, httpCode int, messageCode int) {
-	ctx.Status(httpCode)
-
-	parsedMessageCode := constant.ReserveErrorMessage(messageCode)
-	messageKey := ERROR_KEYS[parsedMessageCode].MessageKey
-	errorCode := ERROR_KEYS[parsedMessageCode].ErrorCode
-
-	T, ok := ctx.Get("T")
-	if ok {
-		translator, ok := T.(func(string) (string, error))
-		if ok {
-			translatedMessage, err := translator(messageKey)
-			ctx.Errors = append(ctx.Errors, &gin.Error{Err: errors.New(translatedMessage)})
-			if err == nil && len(translatedMessage) > 0 {
-				ctx.JSON(httpCode, api.Error{Message: translatedMessage, Code: errorCode, Details: []constant.ErrorDetails{}})
-			} else {
-				ctx.JSON(httpCode, api.Error{Message: fmt.Sprintf("error code: %s", strconv.Itoa(messageCode)), Code: errorCode, Details: []constant.ErrorDetails{}})
-			}
-		} else {
-			ctx.JSON(httpCode, api.Error{Message: fmt.Sprintf("error code: %s", strconv.Itoa(messageCode)), Code: errorCode, Details: []constant.ErrorDetails{}})
-		}
-	} else {
-		ctx.JSON(httpCode, api.Error{Message: fmt.Sprintf("error code: %s", strconv.Itoa(messageCode)), Code: errorCode, Details: []constant.ErrorDetails{}})
-	}
-
-	ctx.Abort()
-}
-
-// ErrorString construct a new error with message
-// Deprecated: use NewErrorString instead
-func ErrorString(ctx *gin.Context, httpCode int, message string) {
-	ctx.Status(httpCode)
-
-	T, ok := ctx.Get("T")
-	if ok {
-		translator, ok := T.(func(string) (string, error))
-		if ok {
-			translatedMessage, err := translator(message)
-			if err == nil {
-				ctx.JSON(httpCode, api.Error{Message: translatedMessage, Code: ERROR_CODE_VALIDATION, Details: []constant.ErrorDetails{}})
-				ctx.Errors = append(ctx.Errors, &gin.Error{Err: errors.New(translatedMessage)})
-			} else {
-				ctx.JSON(httpCode, api.Error{Message: message, Code: ERROR_CODE_VALIDATION, Details: []constant.ErrorDetails{}})
-				ctx.Errors = append(ctx.Errors, &gin.Error{Err: errors.New(message)})
-			}
-		} else {
-			ctx.JSON(httpCode, api.Error{Message: message, Code: ERROR_CODE_VALIDATION, Details: []constant.ErrorDetails{}})
-			ctx.Errors = append(ctx.Errors, &gin.Error{Err: errors.New(message)})
-		}
-	} else {
-		ctx.JSON(httpCode, api.Error{Message: message, Code: ERROR_CODE_VALIDATION, Details: []constant.ErrorDetails{}})
-		ctx.Errors = append(ctx.Errors, &gin.Error{Err: errors.New(message)})
-	}
-
-	ctx.Abort()
-}
-
-// NewE construct an error (usually the error is GenericError).
-func NewE(ctx *gin.Context, err error) {
+// ResponseError construct an error (usually the error is GenericError).
+//
+func ResponseError(ctx *gin.Context, err error) {
 	if err != nil {
 		ctx.Errors = append(ctx.Errors, &gin.Error{Err: err})
 	}
@@ -169,6 +53,8 @@ func NewE(ctx *gin.Context, err error) {
 			errorCode  = errorData.ErrorCode
 		)
 
+		fmt.Println("56 errorCode", messageKey, errorCode)
+
 		// override error message
 		if genericError.GetMessage() != "" && genericError.GetCallback() == nil {
 			ctx.JSON(httpCode, api.Error{Message: genericError.GetMessage(), Code: errorCode, Details: genericError.GetDetails()})
@@ -198,13 +84,13 @@ func NewE(ctx *gin.Context, err error) {
 func NewErrorString(ctx *gin.Context, message string, options ...func(*GenericError)) {
 	errorOptions := []func(*GenericError){OverrideErrorMessage(message)}
 	errorOptions = append(errorOptions, options...)
-	NewE(ctx, NewGenericError(int(ERROR_MSG_NULL), errorOptions...))
+	ResponseError(ctx, NewGenericError(int(ERROR_MSG_NULL), errorOptions...))
 }
 
 // NewErrorCode construct a new error with messageCode.
 // messageCode refers to errors/code.go enum iota of "Code represent error"
 func NewErrorCode(ctx *gin.Context, messageCode int, options ...func(*GenericError)) {
-	NewE(ctx, NewGenericError(messageCode, options...))
+	ResponseError(ctx, NewGenericError(messageCode, options...))
 }
 
 func Translate(ctx context.Context, messageCode int) string {

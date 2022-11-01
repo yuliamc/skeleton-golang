@@ -13,5 +13,9 @@ func (r *partnerRepo) Find(ctx context.Context, where *model.Partner) (*model.Pa
 		return nil, err
 	}
 
+	if query.RowsAffected == 0 {
+		return nil, nil
+	}
+
 	return partnerModel, nil
 }
