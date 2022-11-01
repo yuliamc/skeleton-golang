@@ -12,10 +12,10 @@ type AsyncGroup struct {
 // Async Do the async wait process functionality
 func (async *AsyncGroup) Async(callback func()) {
 	async.wait.Add(1)
-	go func() {
+	GoRecover(func() {
 		defer async.wait.Done()
 		callback()
-	}()
+	})
 }
 
 // AsyncWait Wait until all process in async group is finished
