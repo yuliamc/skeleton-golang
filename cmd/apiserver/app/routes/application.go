@@ -7,5 +7,5 @@ import (
 )
 
 func initApplicationRoute(group *gin.RouterGroup) {
-	group.GET("/application/loan-scheme", store.LoanSchemeHandler.GetLoanScheme)
+	group.GET("/application/partner/:id", store.PartnerHandler.FindByID)
 }

@@ -6,13 +6,13 @@ import (
 )
 
 type MiddlewareAccess struct {
-	redisDel       redis.RedisDelegate
+	redisClient    redis.RedisDelegate
 	partnerService srvs.PartnerService
 }
 
-func NewMiddlewareAccess(redisDel redis.RedisDelegate, partnerService srvs.PartnerService) MiddlewareAccess {
+func NewMiddlewareAccess(redisClient *redis.RedisDelegate, partnerService *srvs.PartnerService) MiddlewareAccess {
 	return MiddlewareAccess{
-		redisDel:       redisDel,
-		partnerService: partnerService,
+		redisClient:    *redisClient,
+		partnerService: *partnerService,
 	}
 }

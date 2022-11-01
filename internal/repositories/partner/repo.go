@@ -6,13 +6,11 @@ import (
 	"modalrakyat/skeleton-golang/pkg/utils/errors"
 )
 
-func (r *partnerRepo) GetByID(ctx context.Context, ID uint) (*model.Partner, error) {
-	partner := model.Partner{}
-	partner.ID = ID
+func (r *partnerRepo) Find(ctx context.Context, where *model.Partner) (*model.Partner, error) {
+	partnerModel := model.Partner{}
+	query := r.dbClient.Get(ctx).Where(where)
 
-	query := r.dbdget.Get(ctx).Where(partner)
-
-	if err := query.Find(&partner).Error; err != nil {
+	if err := query.Find(&partnerModel).Error; err != nil {
 		return nil, err
 	}
 
@@ -20,5 +18,5 @@ func (r *partnerRepo) GetByID(ctx context.Context, ID uint) (*model.Partner, err
 		return nil, errors.NewGenericError(errors.DATA_NOT_FOUND)
 	}
 
-	return &partner, nil
+	return &partnerModel, nil
 }

@@ -4,14 +4,12 @@ go 1.19
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
-	github.com/Nerzal/gocloak/v11 v11.0.2
 	github.com/caarlos0/env/v6 v6.6.2
 	github.com/facebookgo/grace v0.0.0-20180706040059-75cf19382434
 	github.com/gin-gonic/gin v1.7.2
 	github.com/go-playground/validator/v10 v10.6.1
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-resty/resty/v2 v2.6.0
-	github.com/golang-jwt/jwt/v4 v4.4.0
 	github.com/joho/godotenv v1.3.0
 	github.com/json-iterator/go v1.1.11
 	github.com/labstack/gommon v0.3.0
@@ -55,9 +53,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/onsi/ginkgo v1.16.4 // indirect
 	github.com/onsi/gomega v1.15.0 // indirect
-	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/segmentio/ksuid v1.0.4 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect

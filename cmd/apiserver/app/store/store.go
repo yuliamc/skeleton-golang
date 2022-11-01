@@ -11,40 +11,45 @@ import (
 )
 
 var (
+	// resources
+	dbClient    db.DBGormDelegate
+	redisClient redis.RedisDelegate
+
 	// hdrs
-	LoanSchemeHandler *hdrs.LoanSchemeHandler
+	PartnerHandler *hdrs.PartnerHandler
 
 	// srvs
-	PartnerService srvs.PartnerService
+	partnerService srvs.PartnerService
 
 	// repos
-	PartnerRepo repos.PartnerRepo
-	TxRepo      repos.TxRepo
+	partnerRepo repos.PartnerRepo
+	txRepo      repos.TxRepo
 
 	//middleware
-	MiddlewareAccess middlewares.MiddlewareAccess
+	accessMiddleware middlewares.MiddlewareAccess
 )
 
 // Init application global variable with single instance
 func InitDI() {
 	// setup resources
-	dbdget := db.NewDBdelegate(config.Config.DB.Debug)
-	dbdget.Init()
-	redisDel := redis.NewRedisDel()
-	redisDel.Init()
+	dbClient = db.NewDBdelegate(config.Config.DB.Debug)
+	dbClient.Init()
+
+	redisClient = redis.NewRedisDel()
+	redisClient.Init()
 
 	// setup components
 	// repos
-	PartnerRepo = repos.NewPartnerRepo(dbdget)
-	TxRepo = repos.NewTxRepo(dbdget)
+	partnerRepo = repos.NewPartnerRepo(dbClient)
+	txRepo = repos.NewTxRepo(dbClient)
 
 	// services
-	PartnerService = srvs.NewPartnerService(PartnerRepo)
+	partnerService = srvs.NewPartnerService(&partnerRepo)
 
 	// hdrs
-	LoanSchemeHandler = hdrs.NewLoanSchemeHandler(RegistrationPartnerService, LoanSchemeService)
+	PartnerHandler = hdrs.NewPartnerHandler(&partnerService)
 
 	// middleware
-	MiddlewareAccess = middlewares.NewMiddlewareAccess(redisDel, PartnerService)
+	accessMiddleware = middlewares.NewMiddlewareAccess(&redisClient, &partnerService)
 
 }
