@@ -5,6 +5,6 @@ type Uri struct {
 }
 
 type CreatePartnerPayload struct {
-	Code string `json:"code" binding:"required" validate:"min=8,max=50"`
+	Code string `json:"code" binding:"required" validate:"min=3,max=10"`
 	Name string `json:"name" binding:"required" validate:"min=3,max=100"`
 }

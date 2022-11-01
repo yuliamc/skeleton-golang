@@ -19,8 +19,10 @@ func NewPartnerResponse(ID *uint, uniqueID *string, code *string, name *string, 
 
 func NewPartnerModelCreatePayload(uniqueID *string, code *string, name *string) model.Partner {
 	return model.Partner{
-		UniqueID: *uniqueID,
-		Code:     *code,
-		Name:     *name,
+		UniqueID:      *uniqueID,
+		Code:          *code,
+		Name:          *name,
+		LoanTypeID:    99999,
+		EscrowAccount: map[string]interface{}{},
 	}
 }
