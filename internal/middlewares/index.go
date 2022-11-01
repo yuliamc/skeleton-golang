@@ -10,9 +10,9 @@ type MiddlewareAccess struct {
 	partnerService srvs.PartnerService
 }
 
-func NewMiddlewareAccess(redisClient *redis.RedisDelegate, partnerService *srvs.PartnerService) MiddlewareAccess {
+func NewMiddlewareAccess(redisClient redis.RedisDelegate, partnerService srvs.PartnerService) MiddlewareAccess {
 	return MiddlewareAccess{
-		redisClient:    *redisClient,
-		partnerService: *partnerService,
+		redisClient:    redisClient,
+		partnerService: partnerService,
 	}
 }

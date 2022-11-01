@@ -37,6 +37,7 @@ func Run() {
 	// init components
 	store.InitDI()
 	lang.Init(bundle)
+	logs.Init()
 	timeutil.Init(config.Config.System.TimeZone)
 
 	logs.Log.Infof("[Server:Addr]: %s%s\n", config.Config.System.AppServer, config.Config.System.AppAddr)

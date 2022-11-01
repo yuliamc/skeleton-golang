@@ -13,8 +13,8 @@ type partnerService struct {
 	partnerRepo repos.PartnerRepo
 }
 
-func NewPartnerService(partnerRepo *repos.PartnerRepo) PartnerService {
+func NewPartnerService(partnerRepo repos.PartnerRepo) PartnerService {
 	return &partnerService{
-		partnerRepo: *partnerRepo,
+		partnerRepo: partnerRepo,
 	}
 }

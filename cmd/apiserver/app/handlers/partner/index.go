@@ -8,8 +8,8 @@ type PartnerHandler struct {
 	PartnerService srvs.PartnerService
 }
 
-func NewPartnerHandler(partnerService *srvs.PartnerService) *PartnerHandler {
+func NewPartnerHandler(partnerService srvs.PartnerService) *PartnerHandler {
 	return &PartnerHandler{
-		PartnerService: *partnerService,
+		PartnerService: partnerService,
 	}
 }

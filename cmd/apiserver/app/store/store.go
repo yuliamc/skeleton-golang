@@ -44,12 +44,12 @@ func InitDI() {
 	txRepo = repos.NewTxRepo(dbClient)
 
 	// services
-	partnerService = srvs.NewPartnerService(&partnerRepo)
+	partnerService = srvs.NewPartnerService(partnerRepo)
 
 	// hdrs
-	PartnerHandler = hdrs.NewPartnerHandler(&partnerService)
+	PartnerHandler = hdrs.NewPartnerHandler(partnerService)
 
 	// middleware
-	accessMiddleware = middlewares.NewMiddlewareAccess(&redisClient, &partnerService)
+	accessMiddleware = middlewares.NewMiddlewareAccess(redisClient, partnerService)
 
 }

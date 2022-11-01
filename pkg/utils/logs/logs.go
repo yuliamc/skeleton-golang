@@ -31,11 +31,7 @@ type (
 )
 
 // Init init log wrapper
-func Init(url string) {
-	// if url != "" {
-	// client = resty.New()
-	// serverlessURL = url
-	// }
+func Init() {
 	log := logrus.New()
 	log.SetOutput(os.Stdout)
 	Log = &Logrus{log}
