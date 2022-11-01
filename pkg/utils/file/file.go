@@ -23,7 +23,10 @@ func GetRemoteFileInBytes(url string) ([]byte, error) {
 	}
 
 	content := make([]byte, resp.ContentLength)
-	_, err = resp.Body.Read(content)
+	if _, err = resp.Body.Read(content); err != nil {
+		return nil, err
+	}
+
 	defer resp.Body.Close()
 
 	return content, nil

@@ -3,8 +3,8 @@ package redis
 import (
 	"crypto/tls"
 	"encoding/json"
-	"fmt"
 	"modalrakyat/skeleton-golang/config"
+	"modalrakyat/skeleton-golang/pkg/utils/logs"
 	"sync"
 	"time"
 
@@ -125,7 +125,7 @@ func (redisDel *redisDelegate) run(use bool) {
 
 		})
 	} else {
-		fmt.Println("redis not used")
+		logs.Log.Warn("Redis client not used!")
 	}
 
 }

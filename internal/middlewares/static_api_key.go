@@ -12,7 +12,7 @@ func StaticApiKey(apiKey *string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		retrievedApiKey := c.Request.Header.Get(header)
 		if retrievedApiKey == "" || retrievedApiKey != *apiKey {
-			errors.NewErrorCode(c, int(errors.ERROR_MSG_UNAUTHORIZED_REQUEST))
+			errors.ResponseErrorWithCode(c, int(errors.ERROR_MSG_UNAUTHORIZED_REQUEST))
 			return
 		}
 

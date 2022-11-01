@@ -65,7 +65,7 @@ func NewHTTPClient(host string, duration *time.Duration) HTTPDelegate {
 
 // TraceRequest is a function that used to see last request path, params, headers, content-type, response code and response
 func (hr *HTTPClient) TraceRequest() {
-	fmt.Printf(
+	logs.Log.Info(
 		"Path: %s\nParams: %s\nHeader: %s\nMethod: %s\nContent Type: %s\nResponse Code: %d\nResponse: %s\n",
 		hr.cache.path,
 		hr.cache.params,
@@ -370,7 +370,7 @@ func httplog(statusCode int, url string, method string, request interface{}, res
 
 	cl := logs.Log.WithFields(fields)
 	cl.Info("HTTP log")
-	logs.PushLog("loanhub_http", cl)
+	logs.Log.Info(cl)
 }
 
 func fixConstruct(data interface{}) interface{} {

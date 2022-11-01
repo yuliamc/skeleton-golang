@@ -28,7 +28,6 @@ type dbDelegate struct {
 	dbGorm *gorm.DB
 	once   sync.Once
 	debug  bool
-	tx     *gorm.DB
 }
 
 func NewDBdelegate(debug bool) DBGormDelegate {

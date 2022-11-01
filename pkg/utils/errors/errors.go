@@ -15,6 +15,7 @@ import (
 
 	"modalrakyat/skeleton-golang/pkg/utils/api"
 	"modalrakyat/skeleton-golang/pkg/utils/constant"
+	"modalrakyat/skeleton-golang/pkg/utils/null"
 )
 
 // ResponseError construct an error (usually the error is GenericError).
@@ -53,8 +54,6 @@ func ResponseError(ctx *gin.Context, err error) {
 			errorCode  = errorData.ErrorCode
 		)
 
-		fmt.Println("56 errorCode", messageKey, errorCode)
-
 		// override error message
 		if genericError.GetMessage() != "" && genericError.GetCallback() == nil {
 			ctx.JSON(httpCode, api.Error{Message: genericError.GetMessage(), Code: errorCode, Details: genericError.GetDetails()})
@@ -81,7 +80,7 @@ func ResponseError(ctx *gin.Context, err error) {
 }
 
 // NewErrorString construct a new error with message
-func NewErrorString(ctx *gin.Context, message string, options ...func(*GenericError)) {
+func ResponseErrorWithString(ctx *gin.Context, message string, options ...func(*GenericError)) {
 	errorOptions := []func(*GenericError){OverrideErrorMessage(message)}
 	errorOptions = append(errorOptions, options...)
 	ResponseError(ctx, NewGenericError(int(ERROR_MSG_NULL), errorOptions...))
@@ -89,7 +88,7 @@ func NewErrorString(ctx *gin.Context, message string, options ...func(*GenericEr
 
 // NewErrorCode construct a new error with messageCode.
 // messageCode refers to errors/code.go enum iota of "Code represent error"
-func NewErrorCode(ctx *gin.Context, messageCode int, options ...func(*GenericError)) {
+func ResponseErrorWithCode(ctx *gin.Context, messageCode int, options ...func(*GenericError)) {
 	ResponseError(ctx, NewGenericError(messageCode, options...))
 }
 
@@ -119,7 +118,11 @@ func ToString(err interface{}) string {
 		}
 	}
 	if genericError, ok := err.(*GenericError); ok {
-		return genericError.GetErrorDataMessageKey()
+		msg := genericError.GetErrorDataMessageKey()
+		if null.IsNil(msg) || msg == "NULL" {
+			msg = genericError.Error()
+		}
+		return msg
 	}
 	if e, ok := (err).(error); ok {
 		return e.Error()
@@ -132,14 +135,14 @@ func GetStack(err interface{}) string {
 	var countStackLine int = 0
 	var stringBuffer bytes.Buffer
 
-	stack := fmt.Sprintf("%s", debug.Stack())
+	stack := fmt.Sprint(debug.Stack())
 	stacks := strings.Split(stack, "\n")
 	for _, v := range stacks {
 		if countStackLine >= MAX_STACK_LINE {
 			break
 		}
 
-		start := strings.Index(v, "/loanhub-service")
+		start := strings.Index(v, "/skeleton-golang")
 		if start < 0 {
 			continue
 		}

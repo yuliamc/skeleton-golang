@@ -7,19 +7,11 @@ import (
 	"modalrakyat/skeleton-golang/pkg/utils/api"
 	"modalrakyat/skeleton-golang/pkg/utils/errors"
 	"modalrakyat/skeleton-golang/pkg/utils/logs"
-	netutil "modalrakyat/skeleton-golang/pkg/utils/net"
-	"modalrakyat/skeleton-golang/pkg/utils/parse"
+	"modalrakyat/skeleton-golang/pkg/utils/net"
 	stringutil "modalrakyat/skeleton-golang/pkg/utils/strings"
 	timeutil "modalrakyat/skeleton-golang/pkg/utils/time"
 
 	"github.com/gin-gonic/gin"
-)
-
-var (
-	dunno     = []byte("???")
-	centerDot = []byte("·")
-	dot       = []byte(".")
-	slash     = []byte("/")
 )
 
 // Recovery returns a middleware for a given writer that recovers from any panics and writes a 500 if there was one.
@@ -27,8 +19,8 @@ func Recovery(mode string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		t := timeutil.Now()
 
-		var stash parse.Stashes
-		stash.NewRequestBody(c)
+		requestParser := net.HTTPRequestParser{}
+		requestParser.ParseRequestBody(c)
 
 		defer func() {
 			if err := recover(); err == nil {
@@ -45,7 +37,7 @@ func Recovery(mode string) gin.HandlerFunc {
 			}
 
 			fields := logs.Fields{
-				"client_ip":       netutil.GetClientIpAddress(c),
+				"client_ip":       net.GetClientIpAddress(c),
 				"client_os":       c.Request.Header.Get("Client-OS"),
 				"client_version":  c.Request.Header.Get("Client-Version"),
 				"request_id":      c.GetString("RequestId"),
@@ -64,7 +56,7 @@ func Recovery(mode string) gin.HandlerFunc {
 				"process_time_ns": latency.Nanoseconds(),
 				"error_string":    errors.ToString(err),
 				"error_stack":     errors.GetStack(err),
-				"request_body":    stash.GetRequestBody(c),
+				"request_body":    requestParser.GetRequestBody(c),
 				"request_header":  c.Request.Header,
 				"type_str":        "ERR-PANIC",
 			}
@@ -77,6 +69,7 @@ func Recovery(mode string) gin.HandlerFunc {
 			cl = cl.WithFields(logs.Fields{
 				"route_path_params": routePathParamMap,
 			})
+			logs.Log.Warn(cl)
 
 			c.AbortWithStatusJSON(500, api.Error{
 				Message: errors.Translate(c, int(errors.ERROR_MSG_INTERNAL_SERVER_ERROR)),

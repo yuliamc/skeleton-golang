@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"modalrakyat/skeleton-golang/pkg/utils/null"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 const NULL = "NULL"
@@ -95,7 +97,7 @@ func FirstUpperCase(s *string) *string {
 	if null.IsNil(s) {
 		return s
 	}
-	value := strings.Title(strings.ToLower(*s))
+	value := strings.ToTitle(strings.ToLower(*s))
 	return &value
 }
 
@@ -126,7 +128,7 @@ func Get(source map[string]interface{}, key *string) (interface{}, bool) {
 	if *key == "" {
 		return source, true
 	} else if len(values) == 1 {
-		result, ok := source[*key].(interface{})
+		result, ok := source[*key]
 		return result, ok
 	}
 
@@ -145,4 +147,8 @@ func ConvertMapStringToStringPointer(payload map[string]string) map[string]*stri
 		result[key] = &tempValue
 	}
 	return result
+}
+
+func GenerateUniqueID() string {
+	return uuid.NewString()
 }

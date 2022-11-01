@@ -14,8 +14,6 @@ import (
 	evp "github.com/walkert/go-evp"
 )
 
-var cryptKey = "5fcff2ecb09d48eeb4fd2cb713b6b860"
-
 func pkcs7Unpad(src []byte) []byte {
 	length := len(src)
 	unpadding := int(src[length-1])
@@ -41,7 +39,7 @@ func generateSalt() ([]byte, error) {
 func DecryptAesWithIv(rawKey string, encryptedData string) (string, error) {
 	split := strings.Split(encryptedData, ":")
 	if len(split) < 2 {
-		return "", errors.NewGenericError(errors.INVALID_ENCRYPTION)
+		return "", errors.NewGenericError(int(errors.ERROR_MSG_INVALID_ENCRYPTION))
 	}
 	saltCiphertext, _ := hex.DecodeString(split[1])
 	salt := saltCiphertext[8:16]
@@ -79,7 +77,6 @@ func EncryptAesWithIv(rawKey, text *string) (string, error) {
 	// Create new AES cipher block
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		fmt.Printf("err: %s\n", err)
 		return "", err
 	}
 
@@ -97,6 +94,7 @@ func EncryptAesWithIv(rawKey, text *string) (string, error) {
 
 func SampleMain() {
 	text := "test123123"
+	cryptKey := "5fcff2ecb09d48eeb4fd2cb713b6b860"
 	encryptedData, err := EncryptAesWithIv(&cryptKey, &text)
 	if err != nil {
 		fmt.Println(err.Error())
