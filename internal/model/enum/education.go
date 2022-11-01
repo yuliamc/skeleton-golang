@@ -5,7 +5,6 @@ import (
 	"strings"
 )
 
-// Education is connected with Loan model struct #Registration.Education
 type Education int64
 
 //Scan for converting byte to string for fetching/read

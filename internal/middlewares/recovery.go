@@ -7,8 +7,8 @@ import (
 	"modalrakyat/skeleton-golang/pkg/utils/api"
 	"modalrakyat/skeleton-golang/pkg/utils/errors"
 	"modalrakyat/skeleton-golang/pkg/utils/logs"
+	"modalrakyat/skeleton-golang/pkg/utils/net"
 	netutil "modalrakyat/skeleton-golang/pkg/utils/net"
-	"modalrakyat/skeleton-golang/pkg/utils/parse"
 	stringutil "modalrakyat/skeleton-golang/pkg/utils/strings"
 	timeutil "modalrakyat/skeleton-golang/pkg/utils/time"
 
@@ -27,8 +27,8 @@ func Recovery(mode string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		t := timeutil.Now()
 
-		var stash parse.Stashes
-		stash.NewRequestBody(c)
+		requestParser := net.HTTPRequestParser{}
+		requestParser.ParseRequestBody(c)
 
 		defer func() {
 			if err := recover(); err == nil {
@@ -64,7 +64,7 @@ func Recovery(mode string) gin.HandlerFunc {
 				"process_time_ns": latency.Nanoseconds(),
 				"error_string":    errors.ToString(err),
 				"error_stack":     errors.GetStack(err),
-				"request_body":    stash.GetRequestBody(c),
+				"request_body":    requestParser.GetRequestBody(c),
 				"request_header":  c.Request.Header,
 				"type_str":        "ERR-PANIC",
 			}

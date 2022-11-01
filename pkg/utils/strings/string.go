@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"modalrakyat/skeleton-golang/pkg/utils/null"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 const NULL = "NULL"
@@ -145,4 +147,8 @@ func ConvertMapStringToStringPointer(payload map[string]string) map[string]*stri
 		result[key] = &tempValue
 	}
 	return result
+}
+
+func GenerateUniqueID() string {
+	return uuid.NewString()
 }

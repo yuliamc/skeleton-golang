@@ -37,7 +37,7 @@ var required = &ValidatorTranslation{
 	GetMessage: func(e validator.FieldError, mo ValidatorTranslation) string {
 		failedField := e.Field()
 		templateData := map[string]interface{}{"Field": failedField}
-		msg, _ := lang.CurrentTranslation.Translate("ERR_REQUIRED", templateData)
+		msg, _ := lang.CurrentTranslation.Translate("ERROR_MSG_VALIDATION_REQUIRED", templateData)
 		return msg
 	},
 }
@@ -48,7 +48,7 @@ var length = &ValidatorTranslation{
 		failedField := e.Field()
 		params := e.Param()
 		templateData := map[string]interface{}{"Field": failedField, "Length": params}
-		msg, _ := lang.CurrentTranslation.Translate("ERR_LEN", templateData)
+		msg, _ := lang.CurrentTranslation.Translate("ERROR_MSG_VALIDATION_LEN", templateData)
 		return msg
 	},
 }
@@ -58,7 +58,7 @@ var email = &ValidatorTranslation{
 	GetMessage: func(e validator.FieldError, mo ValidatorTranslation) string {
 		failedField := e.Field()
 		templateData := map[string]interface{}{"Field": failedField}
-		msg, _ := lang.CurrentTranslation.Translate("ERR_EMAIL", templateData)
+		msg, _ := lang.CurrentTranslation.Translate("ERROR_MSG_VALIDATION_EMAIL", templateData)
 		return msg
 	},
 }
@@ -69,7 +69,7 @@ var max = &ValidatorTranslation{
 		failedField := e.Field()
 		params := e.Param()
 		templateData := map[string]interface{}{"Field": failedField, "Length": params}
-		msg, _ := lang.CurrentTranslation.Translate("ERR_MAX", templateData)
+		msg, _ := lang.CurrentTranslation.Translate("ERROR_MSG_VALIDATION_MAX", templateData)
 		return msg
 	},
 }
@@ -80,7 +80,7 @@ var min = &ValidatorTranslation{
 		failedField := e.Field()
 		params := e.Param()
 		templateData := map[string]interface{}{"Field": failedField, "Length": params}
-		msg, _ := lang.CurrentTranslation.Translate("ERR_MIN", templateData)
+		msg, _ := lang.CurrentTranslation.Translate("ERROR_MSG_VALIDATION_MIN", templateData)
 		return msg
 	},
 }
@@ -90,7 +90,7 @@ var numeric = &ValidatorTranslation{
 	GetMessage: func(e validator.FieldError, mo ValidatorTranslation) string {
 		failedField := e.Field()
 		templateData := map[string]interface{}{"Field": failedField}
-		msg, _ := lang.CurrentTranslation.Translate("ERR_NUMERIC", templateData)
+		msg, _ := lang.CurrentTranslation.Translate("ERROR_MSG_VALIDATION_NUMERIC", templateData)
 		return msg
 	},
 }
@@ -100,7 +100,7 @@ var url = &ValidatorTranslation{
 	GetMessage: func(e validator.FieldError, mo ValidatorTranslation) string {
 		failedField := e.Field()
 		templateData := map[string]interface{}{"Field": failedField}
-		msg, _ := lang.CurrentTranslation.Translate("ERR_URL", templateData)
+		msg, _ := lang.CurrentTranslation.Translate("ERROR_MSG_VALIDATION_URL", templateData)
 		return msg
 	},
 }

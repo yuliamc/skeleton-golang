@@ -1,6 +1,5 @@
 package constant
 
-//todo: harus di satuin creator sama accessor, jadiin global
 type Creator struct {
 	ID          uint   `json:"id"`
 	Name        string `json:"name"`
@@ -10,7 +9,6 @@ type Creator struct {
 	PhoneNumber string `json:"phone_number"`
 }
 
-// Key value pair struct
 type KeyValue struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`

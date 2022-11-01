@@ -1,13 +1,12 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/caarlos0/env/v6"
 	"github.com/joho/godotenv"
 
 	"modalrakyat/skeleton-golang/pkg/utils/file"
 	"modalrakyat/skeleton-golang/pkg/utils/json"
+	"modalrakyat/skeleton-golang/pkg/utils/logs"
 )
 
 // Config global setting
@@ -63,5 +62,5 @@ func Init() {
 func Show() {
 	Init()
 	str, _ := json.MarshalIndent(Config, "", " ")
-	fmt.Printf("Config: %s\n", str)
+	logs.Log.Info("Config: %s\n", str)
 }

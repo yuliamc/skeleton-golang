@@ -4,8 +4,8 @@ import (
 	"modalrakyat/skeleton-golang/config"
 	"modalrakyat/skeleton-golang/pkg/utils/errors"
 	"modalrakyat/skeleton-golang/pkg/utils/logs"
+	"modalrakyat/skeleton-golang/pkg/utils/net"
 	netutil "modalrakyat/skeleton-golang/pkg/utils/net"
-	"modalrakyat/skeleton-golang/pkg/utils/parse"
 	stringer "modalrakyat/skeleton-golang/pkg/utils/strings"
 	timeutil "modalrakyat/skeleton-golang/pkg/utils/time"
 
@@ -15,8 +15,9 @@ import (
 func AccessLog() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		t := timeutil.Now()
-		var stash parse.Stashes
-		stash.NewRequestBody(c)
+
+		requestParser := net.HTTPRequestParser{}
+		requestParser.ParseRequestBody(c)
 
 		c.Next()
 
@@ -45,7 +46,7 @@ func AccessLog() gin.HandlerFunc {
 			"status":          c.Writer.Status(),
 			"process_time":    latency.String(),
 			"process_time_ns": latency.Nanoseconds(),
-			"request_body":    stash.GetRequestBody(c),
+			"request_body":    requestParser.GetRequestBody(c),
 			"request_header":  c.Request.Header,
 			"type_str":        "GIN",
 		}
@@ -68,9 +69,9 @@ func AccessLog() gin.HandlerFunc {
 				})
 				break
 			}
-			logs.Log.Error(cl)
+			logs.Log.Errorln(cl)
 		} else {
-			logs.Log.Info(cl)
+			logs.Log.Infoln(cl)
 		}
 	}
 }

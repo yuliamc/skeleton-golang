@@ -8,6 +8,9 @@ import (
 
 type PartnerRepo interface {
 	Find(ctx context.Context, where *model.Partner) (*model.Partner, error)
+	FindAll(ctx context.Context) (*[]model.Partner, error)
+	CountAll(ctx context.Context) (*int64, error)
+	Create(ctx context.Context, partner *model.Partner) error
 }
 
 type partnerRepo struct {

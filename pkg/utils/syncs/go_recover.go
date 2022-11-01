@@ -2,14 +2,10 @@
 package syncs
 
 import (
-	"fmt"
-	"log"
 	"modalrakyat/skeleton-golang/config"
 	"modalrakyat/skeleton-golang/pkg/utils/errors"
 	"modalrakyat/skeleton-golang/pkg/utils/logs"
 	"reflect"
-
-	"github.com/gin-gonic/gin"
 )
 
 // Go Routine Recovery. Execute Go Routine with panic handling to prevent system down due to panic
@@ -23,11 +19,6 @@ func GoRecover(f func()) {
 
 func recoverPanic() {
 	if err := recover(); err != nil {
-		if config.Config.System.Mode != gin.ReleaseMode {
-			log.Println(fmt.Sprintf("[START-GORECOVER-PANIC]\n%s\n[END-GORECOVER-PANIC]", errors.GetStack(err)))
-			return
-		}
-
 		fields := logs.Fields{
 			"type_str":     "ERR-GORECOVER-PANIC",
 			"mode":         config.Config.System.Mode,
@@ -37,6 +28,6 @@ func recoverPanic() {
 		}
 
 		cl := logs.Log.WithFields(fields)
-		logs.PushPanicLog(cl)
+		logs.Log.Warnf("[START-GORECOVER-PANIC]\n%s\n[END-GORECOVER-PANIC]", errors.GetStack(err), cl)
 	}
 }

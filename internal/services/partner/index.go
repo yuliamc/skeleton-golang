@@ -7,6 +7,8 @@ import (
 
 type PartnerService interface {
 	FindByID(ctx context.Context, ID *uint) (*PartnerResponse, error)
+	FindAll(ctx context.Context) (*[]PartnerResponse, *int64, error)
+	Create(ctx context.Context, payload CreatePartnerPayload) error
 }
 
 type partnerService struct {

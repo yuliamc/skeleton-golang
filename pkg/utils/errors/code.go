@@ -14,14 +14,15 @@ const (
 	ERROR_MSG_UNAUTHORIZED_REQUEST
 	ERROR_MSG_INTERNAL_SERVER_ERROR
 	ERROR_MSG_DATA_NOT_FOUND
+	ERROR_MSG_INVALID_ENCRYPTION
 )
 
 // ERROR_KEYS translate error code to i18n key, determine http status code and error code shown to client
 var ERROR_KEYS = map[constant.ReserveErrorMessage]ErrorData{
-	ERROR_MSG_NULL:                  *NewErrorData("ERROR_MSG_NULL", http.StatusBadRequest, ERROR_CODE_NULL),
-	ERROR_MSG_UNAUTHORIZED_REQUEST:  *NewErrorData("ERROR_MSG_UNAUTHORIZED_REQUEST", http.StatusUnauthorized, ERROR_CODE_VALIDATION),
-	ERROR_MSG_INTERNAL_SERVER_ERROR: *NewErrorData("ERROR_MSG_INTERNAL_SERVER_ERROR", http.StatusUnauthorized, ERROR_CODE_INTERNAL_SERVER_ERROR),
-	ERROR_MSG_DATA_NOT_FOUND:        *NewErrorData("ERROR_MSG_DATA_NOT_FOUND", http.StatusNotFound, ERROR_CODE_GENERAL),
+	ERROR_MSG_NULL:                 *NewErrorData("ERROR_MSG_NULL", http.StatusBadRequest, ERROR_CODE_NULL),
+	ERROR_MSG_UNAUTHORIZED_REQUEST: *NewErrorData("ERROR_MSG_UNAUTHORIZED_REQUEST", http.StatusUnauthorized, ERROR_CODE_VALIDATION),
+	ERROR_MSG_DATA_NOT_FOUND:       *NewErrorData("ERROR_MSG_DATA_NOT_FOUND", http.StatusNotFound, ERROR_CODE_GENERAL),
+	ERROR_MSG_INVALID_ENCRYPTION:   *NewErrorData("ERROR_MSG_INVALID_ENCRYPTION", http.StatusInternalServerError, ERROR_CODE_GENERAL),
 }
 
 type ErrorData struct {
