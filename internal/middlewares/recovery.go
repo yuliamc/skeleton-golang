@@ -8,18 +8,10 @@ import (
 	"modalrakyat/skeleton-golang/pkg/utils/errors"
 	"modalrakyat/skeleton-golang/pkg/utils/logs"
 	"modalrakyat/skeleton-golang/pkg/utils/net"
-	netutil "modalrakyat/skeleton-golang/pkg/utils/net"
 	stringutil "modalrakyat/skeleton-golang/pkg/utils/strings"
 	timeutil "modalrakyat/skeleton-golang/pkg/utils/time"
 
 	"github.com/gin-gonic/gin"
-)
-
-var (
-	dunno     = []byte("???")
-	centerDot = []byte("·")
-	dot       = []byte(".")
-	slash     = []byte("/")
 )
 
 // Recovery returns a middleware for a given writer that recovers from any panics and writes a 500 if there was one.
@@ -45,7 +37,7 @@ func Recovery(mode string) gin.HandlerFunc {
 			}
 
 			fields := logs.Fields{
-				"client_ip":       netutil.GetClientIpAddress(c),
+				"client_ip":       net.GetClientIpAddress(c),
 				"client_os":       c.Request.Header.Get("Client-OS"),
 				"client_version":  c.Request.Header.Get("Client-Version"),
 				"request_id":      c.GetString("RequestId"),
@@ -77,6 +69,7 @@ func Recovery(mode string) gin.HandlerFunc {
 			cl = cl.WithFields(logs.Fields{
 				"route_path_params": routePathParamMap,
 			})
+			logs.Log.Warn(cl)
 
 			c.AbortWithStatusJSON(500, api.Error{
 				Message: errors.Translate(c, int(errors.ERROR_MSG_INTERNAL_SERVER_ERROR)),

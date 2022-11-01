@@ -370,7 +370,7 @@ func httplog(statusCode int, url string, method string, request interface{}, res
 
 	cl := logs.Log.WithFields(fields)
 	cl.Info("HTTP log")
-	logs.PushLog("loanhub_http", cl)
+	logs.Log.Info(cl)
 }
 
 func fixConstruct(data interface{}) interface{} {

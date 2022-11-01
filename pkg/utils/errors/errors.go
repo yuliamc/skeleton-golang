@@ -135,14 +135,14 @@ func GetStack(err interface{}) string {
 	var countStackLine int = 0
 	var stringBuffer bytes.Buffer
 
-	stack := fmt.Sprintf("%s", debug.Stack())
+	stack := fmt.Sprint(debug.Stack())
 	stacks := strings.Split(stack, "\n")
 	for _, v := range stacks {
 		if countStackLine >= MAX_STACK_LINE {
 			break
 		}
 
-		start := strings.Index(v, "/loanhub-service")
+		start := strings.Index(v, "/skeleton-golang")
 		if start < 0 {
 			continue
 		}

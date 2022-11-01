@@ -86,7 +86,9 @@ func (s *partnerService) FindAll(ctx context.Context) (*[]PartnerResponse, *int6
 }
 
 func (s *partnerService) Create(ctx context.Context, payload *CreatePartnerPayload) error {
-	uniqueID := stringutil.GenerateUniqueID()
-	partnerModel := NewPartnerModelCreatePayload(&uniqueID, &payload.Code, &payload.Name)
-	return s.partnerRepo.Create(ctx, &partnerModel)
+	return s.txRepo.Run(ctx, func(ctx context.Context) error {
+		uniqueID := stringutil.GenerateUniqueID()
+		partnerModel := NewPartnerModelCreatePayload(&uniqueID, &payload.Code, &payload.Name)
+		return s.partnerRepo.Create(ctx, &partnerModel)
+	})
 }

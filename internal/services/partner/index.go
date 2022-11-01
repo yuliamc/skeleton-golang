@@ -13,10 +13,12 @@ type PartnerService interface {
 
 type partnerService struct {
 	partnerRepo repos.PartnerRepo
+	txRepo      repos.TxRepo
 }
 
-func NewPartnerService(partnerRepo repos.PartnerRepo) PartnerService {
+func NewPartnerService(partnerRepo repos.PartnerRepo, txRepo repos.TxRepo) PartnerService {
 	return &partnerService{
 		partnerRepo: partnerRepo,
+		txRepo:      txRepo,
 	}
 }

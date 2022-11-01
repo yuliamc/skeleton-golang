@@ -5,7 +5,6 @@ import (
 	"modalrakyat/skeleton-golang/pkg/utils/errors"
 	"modalrakyat/skeleton-golang/pkg/utils/logs"
 	"modalrakyat/skeleton-golang/pkg/utils/net"
-	netutil "modalrakyat/skeleton-golang/pkg/utils/net"
 	stringer "modalrakyat/skeleton-golang/pkg/utils/strings"
 	timeutil "modalrakyat/skeleton-golang/pkg/utils/time"
 
@@ -30,7 +29,7 @@ func AccessLog() gin.HandlerFunc {
 		}
 
 		fields := logs.Fields{
-			"client_ip":       netutil.GetClientIpAddress(c),
+			"client_ip":       net.GetClientIpAddress(c),
 			"client_os":       c.Request.Header.Get("Client-OS"),
 			"client_version":  c.Request.Header.Get("Client-Version"),
 			"request_id":      c.GetString("RequestId"),

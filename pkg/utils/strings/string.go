@@ -97,7 +97,7 @@ func FirstUpperCase(s *string) *string {
 	if null.IsNil(s) {
 		return s
 	}
-	value := strings.Title(strings.ToLower(*s))
+	value := strings.ToTitle(strings.ToLower(*s))
 	return &value
 }
 
@@ -128,7 +128,7 @@ func Get(source map[string]interface{}, key *string) (interface{}, bool) {
 	if *key == "" {
 		return source, true
 	} else if len(values) == 1 {
-		result, ok := source[*key].(interface{})
+		result, ok := source[*key]
 		return result, ok
 	}
 

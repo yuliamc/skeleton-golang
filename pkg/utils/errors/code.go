@@ -64,7 +64,6 @@ func CustomError(message string) error {
 	return errors.New(message)
 }
 
-// Loanhub error wrapper.
 type GenericError struct {
 	// code that refers to enum iota of "Code represent error"
 	code int

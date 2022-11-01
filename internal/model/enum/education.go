@@ -60,8 +60,8 @@ func GetEducationKeyValuePairs() []constant.KeyValue {
 	arr := []constant.KeyValue{}
 	for _, v := range educationKey {
 		arr = append(arr, constant.KeyValue{
-			Key:   v,                // act as key
-			Value: strings.Title(v), // act as label
+			Key:   v,                  // act as key
+			Value: strings.ToTitle(v), // act as label
 		})
 	}
 	return arr

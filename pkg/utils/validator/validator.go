@@ -26,35 +26,32 @@ func GetValidatorMessage(err error) string {
 	if err != nil {
 		errs, ok := err.(validator.ValidationErrors)
 		if ok {
-			for _, e := range errs {
+			e := errs[0]
+			field := wording.ToSnakeCase(e.Field())
+			params := e.Param()
+			customValidator := findValidatorByTag(e.Tag())
+			messageOverwriter := findMessageOverwriter(e.Tag(), field)
+			validatorTranslation := findValidatorTranslation(e.Tag(), field, params)
+			if customValidator != nil {
+				message = customValidator.GetMessage(e, *customValidator)
+			} else if validatorTranslation != nil {
+				message = validatorTranslation.GetMessage(e, *validatorTranslation)
+			} else if messageOverwriter != nil {
+				message = messageOverwriter.GetMessage(e, *messageOverwriter)
+			} else {
 
-				field := wording.ToSnakeCase(e.Field())
-				params := e.Param()
-				customValidator := findValidatorByTag(e.Tag())
-				messageOverwriter := findMessageOverwriter(e.Tag(), field)
-				validatorTranslation := findValidatorTranslation(e.Tag(), field, params)
-				if customValidator != nil {
-					message = customValidator.GetMessage(e, *customValidator)
-				} else if validatorTranslation != nil {
-					message = validatorTranslation.GetMessage(e, *validatorTranslation)
-				} else if messageOverwriter != nil {
-					message = messageOverwriter.GetMessage(e, *messageOverwriter)
+				baseFormat := "{0} does not meet {1}{2} criteria"
+				param := e.Param()
+				if len(param) == 0 {
+					param = ""
 				} else {
-
-					baseFormat := "{0} does not meet {1}{2} criteria"
-					param := e.Param()
-					if len(param) == 0 {
-						param = ""
-					} else {
-						param = "(" + param + ")"
-					}
-					message = baseFormat
-					values := []string{field, e.Tag(), param}
-					for i, v := range values {
-						message = strings.Replace(message, "{"+fmt.Sprint(i)+"}", v, -1)
-					}
+					param = "(" + param + ")"
 				}
-				break // just show first error
+				message = baseFormat
+				values := []string{field, e.Tag(), param}
+				for i, v := range values {
+					message = strings.Replace(message, "{"+fmt.Sprint(i)+"}", v, -1)
+				}
 			}
 		} else {
 			message = "Failed input validation"

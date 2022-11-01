@@ -24,9 +24,6 @@ var (
 	// repos
 	partnerRepo repos.PartnerRepo
 	txRepo      repos.TxRepo
-
-	//middleware
-	accessMiddleware middlewares.MiddlewareAccess
 )
 
 // Init application global variable with single instance
@@ -44,12 +41,12 @@ func InitDI() {
 	txRepo = repos.NewTxRepo(dbClient)
 
 	// services
-	partnerService = srvs.NewPartnerService(partnerRepo)
+	partnerService = srvs.NewPartnerService(partnerRepo, txRepo)
 
 	// hdrs
 	PartnerHandler = hdrs.NewPartnerHandler(partnerService)
 
 	// middleware
-	accessMiddleware = middlewares.NewMiddlewareAccess(redisClient, partnerService)
+	middlewares.NewMiddlewareAccess(redisClient, partnerService)
 
 }
