@@ -31,8 +31,8 @@ func Run() {
 
 	// setup i18n
 	bundle := i18n.NewBundle(language.Indonesian)
-	bundle.MustLoadMessageFile(config.Config.APIServer.LocalePath + "id.json")
-	bundle.MustLoadMessageFile(config.Config.APIServer.LocalePath + "en-US.json")
+	bundle.MustLoadMessageFile(config.Config.System.LocalePath + "id.json")
+	bundle.MustLoadMessageFile(config.Config.System.LocalePath + "en-US.json")
 
 	// init components
 	store.InitDI()

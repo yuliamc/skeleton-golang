@@ -31,15 +31,16 @@ func E(ctx *gin.Context, httpCode int, messageCode int, err error) {
 	if !genericErrorOk {
 		ctx.JSON(http.StatusInternalServerError, api.Error{
 			Message: "Internal Server Error",
-			Code:    ERROR_UNKNOWN,
+			Code:    ERROR_CODE_INTERNAL_SERVER_ERROR,
 			Details: []constant.ErrorDetails{
 				{Key: "error", Value: err.Error()},
 			},
 		})
 	} else {
 		messageCode = genericError.GetCode()
-		messageKey := ERROR_KEYS[messageCode].MessageKey
-		errorCode := ERROR_KEYS[messageCode].ErrorCode
+		parsedMessageCode := constant.ReserveErrorMessage(messageCode)
+		messageKey := ERROR_KEYS[parsedMessageCode].MessageKey
+		errorCode := ERROR_KEYS[parsedMessageCode].ErrorCode
 
 		T, ok := ctx.Get("T")
 		if ok {
@@ -79,8 +80,9 @@ func E(ctx *gin.Context, httpCode int, messageCode int, err error) {
 func ErrorCode(ctx *gin.Context, httpCode int, messageCode int) {
 	ctx.Status(httpCode)
 
-	messageKey := ERROR_KEYS[messageCode].MessageKey
-	errorCode := ERROR_KEYS[messageCode].ErrorCode
+	parsedMessageCode := constant.ReserveErrorMessage(messageCode)
+	messageKey := ERROR_KEYS[parsedMessageCode].MessageKey
+	errorCode := ERROR_KEYS[parsedMessageCode].ErrorCode
 
 	T, ok := ctx.Get("T")
 	if ok {
@@ -114,18 +116,18 @@ func ErrorString(ctx *gin.Context, httpCode int, message string) {
 		if ok {
 			translatedMessage, err := translator(message)
 			if err == nil {
-				ctx.JSON(httpCode, api.Error{Message: translatedMessage, Code: ERROR_VALIDATION, Details: []constant.ErrorDetails{}})
+				ctx.JSON(httpCode, api.Error{Message: translatedMessage, Code: ERROR_CODE_VALIDATION, Details: []constant.ErrorDetails{}})
 				ctx.Errors = append(ctx.Errors, &gin.Error{Err: errors.New(translatedMessage)})
 			} else {
-				ctx.JSON(httpCode, api.Error{Message: message, Code: ERROR_VALIDATION, Details: []constant.ErrorDetails{}})
+				ctx.JSON(httpCode, api.Error{Message: message, Code: ERROR_CODE_VALIDATION, Details: []constant.ErrorDetails{}})
 				ctx.Errors = append(ctx.Errors, &gin.Error{Err: errors.New(message)})
 			}
 		} else {
-			ctx.JSON(httpCode, api.Error{Message: message, Code: ERROR_VALIDATION, Details: []constant.ErrorDetails{}})
+			ctx.JSON(httpCode, api.Error{Message: message, Code: ERROR_CODE_VALIDATION, Details: []constant.ErrorDetails{}})
 			ctx.Errors = append(ctx.Errors, &gin.Error{Err: errors.New(message)})
 		}
 	} else {
-		ctx.JSON(httpCode, api.Error{Message: message, Code: ERROR_VALIDATION, Details: []constant.ErrorDetails{}})
+		ctx.JSON(httpCode, api.Error{Message: message, Code: ERROR_CODE_VALIDATION, Details: []constant.ErrorDetails{}})
 		ctx.Errors = append(ctx.Errors, &gin.Error{Err: errors.New(message)})
 	}
 
@@ -142,18 +144,18 @@ func NewE(ctx *gin.Context, err error) {
 	if !genericErrorOk {
 		ctx.JSON(http.StatusInternalServerError, api.Error{
 			Message: "Internal Server Error",
-			Code:    ERROR_UNKNOWN,
+			Code:    ERROR_CODE_INTERNAL_SERVER_ERROR,
 			Details: []constant.ErrorDetails{
 				{Key: "error", Value: err.Error()},
 			},
 		})
 	} else {
 		messageCode := genericError.GetCode()
-		errorData, errorDataOk := ERROR_KEYS[messageCode]
+		errorData, errorDataOk := ERROR_KEYS[constant.ReserveErrorMessage(messageCode)]
 		if !errorDataOk {
 			ctx.AbortWithStatusJSON(http.StatusInternalServerError, api.Error{
 				Message: "Internal Server Error",
-				Code:    ERROR_UNKNOWN,
+				Code:    ERROR_CODE_INTERNAL_SERVER_ERROR,
 				Details: []constant.ErrorDetails{
 					{Key: "error", Value: genericError.Error()},
 				},
@@ -196,7 +198,7 @@ func NewE(ctx *gin.Context, err error) {
 func NewErrorString(ctx *gin.Context, message string, options ...func(*GenericError)) {
 	errorOptions := []func(*GenericError){OverrideErrorMessage(message)}
 	errorOptions = append(errorOptions, options...)
-	NewE(ctx, NewGenericError(NULL, errorOptions...))
+	NewE(ctx, NewGenericError(int(ERROR_MSG_NULL), errorOptions...))
 }
 
 // NewErrorCode construct a new error with messageCode.
@@ -211,7 +213,7 @@ func Translate(ctx context.Context, messageCode int) string {
 	if ok {
 		translator, ok := T.(func(string) (string, error))
 		if ok {
-			messageKey := ERROR_KEYS[messageCode].MessageKey
+			messageKey := ERROR_KEYS[constant.ReserveErrorMessage(messageCode)].MessageKey
 			translatedMessage, err := translator(messageKey)
 			if err == nil && len(translatedMessage) > 0 {
 				return translatedMessage

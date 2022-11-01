@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"modalrakyat/skeleton-golang/config"
+	"modalrakyat/skeleton-golang/pkg/utils/errors"
 	"modalrakyat/skeleton-golang/pkg/utils/logs"
 	netutil "modalrakyat/skeleton-golang/pkg/utils/net"
 	"modalrakyat/skeleton-golang/pkg/utils/parse"
@@ -14,7 +15,6 @@ import (
 func AccessLog() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		t := timeutil.Now()
-
 		var stash parse.Stashes
 		stash.NewRequestBody(c)
 
@@ -24,13 +24,6 @@ func AccessLog() gin.HandlerFunc {
 		latency := end.Sub(t)
 
 		var headers map[string][]string = c.Request.Header
-
-		if c.Request.Header.Get("Client-Id") != "" {
-			headers["Client-Id"][0] = stringer.MaskUUIDV4(c.Request.Header.Get("Client-Id"))
-		}
-		if c.Request.Header.Get("Client-Secret") != "" {
-			headers["Client-Secret"][0] = stringer.MaskUUIDV4(c.Request.Header.Get("Client-Secret"))
-		}
 		if c.Request.Header.Get("Authorization") != "" {
 			headers["Authorization"][0] = stringer.MaskUUIDV4(c.Request.Header.Get("Authorization"))
 		}
@@ -42,7 +35,6 @@ func AccessLog() gin.HandlerFunc {
 			"request_id":      c.GetString("RequestId"),
 			"request_uri":     c.Request.RequestURI,
 			"method":          c.Request.Method,
-			"handler":         c.HandlerName(),
 			"user_agent":      c.Request.UserAgent(),
 			"referer":         c.Request.Referer(),
 			"mode":            config.Config.System.Mode,
@@ -69,38 +61,16 @@ func AccessLog() gin.HandlerFunc {
 
 		if len(c.Errors) > 0 {
 			// Append error field if this is an erroneous request.
-			var errString string
-			for i, v := range c.Errors {
-				if i >= 1 {
-					errString += " | "
-				}
-				if assertErr(v.Err) != "FDC_NOT_ELIGIBLE" {
-					errString += assertErr(v.Err)
-				}
+			for _, v := range c.Errors {
+				cl = cl.WithFields(logs.Fields{
+					"error_string": errors.ToString(v.Err),
+					"error_stack":  errors.GetStack(v.Err),
+				})
+				break
 			}
-			if errString == "" {
-				return
-			}
-			cl = cl.WithFields(logs.Fields{
-				"error_string": errString,
-			})
-			logs.PushLog("loanhub_error", cl)
+			logs.Log.Error(cl)
 		} else {
-			if c.Request.Method == "GET" || c.Request.Method == "OPTIONS" {
-				return
-			}
-
-			cl.Info("GIN access log")
-			logs.ActivityLog(cl)
+			logs.Log.Info(cl)
 		}
 	}
-}
-
-func GetRoutePath(c *gin.Context) string {
-
-	v, _ := c.Get(logs.SetRoutePath)
-	if v == nil {
-		return c.Request.URL.Path
-	}
-	return v.(string)
 }

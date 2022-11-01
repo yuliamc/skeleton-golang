@@ -3,9 +3,6 @@ package logs
 import (
 	"io"
 	"os"
-	"reflect"
-
-	systemlog "log"
 
 	"github.com/labstack/gommon/log"
 	"github.com/sirupsen/logrus"
@@ -121,51 +118,4 @@ func (l Logrus) Fatalj(j log.JSON) {
 // Panicj panic json log
 func (l Logrus) Panicj(j log.JSON) {
 	l.WithFields(logrus.Fields(j)).Panic()
-}
-
-func PushPanicLog(cl *logrus.Entry) {
-	send("loanhub_error", cl)
-}
-
-func PushErrorLog(err error) {
-	cl := Log.WithFields(Fields{
-		"type_str":     "ERR-ERROR",
-		"error_type":   reflect.ValueOf(err).Type().String(),
-		"error_string": err.Error(),
-	})
-	PushPanicLog(cl)
-}
-
-func PushLog(collectionName string, cl *logrus.Entry) {
-	send(collectionName, cl)
-}
-
-func ActivityLog(cl *logrus.Entry) {
-	send("loanhub_activity", cl)
-}
-
-func PushDebugLog(cl *logrus.Entry) {
-	send("loanhub_debug", cl)
-}
-
-func send(collectionName string, cl *logrus.Entry) {
-	// if serverlessURL == "" {
-	// 	return
-	// }
-
-	// payload := (map[string]interface{})(cl.Data)
-	// payload["created_at"] = timeutil.NowStr()
-
-	// client.R().
-	// 	SetHeaders(map[string]string{
-	// 		"Content-Type": "application/json",
-	// 	}).
-	// 	SetBody(
-	// 		map[string]interface{}{
-	// 			"collection_name": collectionName,
-	// 			"payload":         payload,
-	// 		},
-	// 	).
-	// 	Post(serverlessURL + "/v1/log")
-	systemlog.Println(collectionName, cl)
 }

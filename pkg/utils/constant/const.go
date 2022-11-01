@@ -23,6 +23,7 @@ type KeyValue struct {
 }
 
 type ReserveErrorCode int
+type ReserveErrorMessage int
 
 type ErrorDetails struct {
 	Key   string      `json:"key"`
