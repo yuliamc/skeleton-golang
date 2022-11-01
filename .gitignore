@@ -1,6 +1,8 @@
 # Ignore environment variable
 .env
-.air.*
+
+# Ignore air toml configuration
+.air.toml
 
 # Ignore OS Files
 .DS_Store
@@ -10,6 +12,9 @@
 .idea
 
 # Ignore auto generated file and folder
+*.log
+*.out
+*.bak
 tmp
 main
-*.out
+vendor
