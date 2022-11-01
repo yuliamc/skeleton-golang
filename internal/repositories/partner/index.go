@@ -7,19 +7,15 @@ import (
 )
 
 type PartnerRepo interface {
-	// Common / Apps
-	GetByID(ctx context.Context, ID uint) (*model.Partner, error)
-
-	// Microlending
-	MLGetDropdown(ctx context.Context, fields ...string) ([]*model.Partner, error)
+	Find(ctx context.Context, where *model.Partner) (*model.Partner, error)
 }
 
 type partnerRepo struct {
-	dbdget db.DBGormDelegate
+	dbClient db.DBGormDelegate
 }
 
-func NewPartnerRepo(dbdget db.DBGormDelegate) PartnerRepo {
+func NewPartnerRepo(dbClient db.DBGormDelegate) PartnerRepo {
 	return &partnerRepo{
-		dbdget: dbdget,
+		dbClient: dbClient,
 	}
 }

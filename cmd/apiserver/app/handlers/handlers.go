@@ -1,14 +1,14 @@
 package hds
 
 import (
-	"modalrakyat/skeleton-golang/cmd/apiserver/app/handlers/loan_scheme"
+	"modalrakyat/skeleton-golang/cmd/apiserver/app/handlers/partner"
 )
 
 // put handlers alias
 type (
-	LoanSchemeHandler = loan_scheme.LoanSchemeHandler
+	PartnerHandler = partner.PartnerHandler
 )
 
 var (
-	NewLoanSchemeHandler = loan_scheme.NewLoanSchemeHandler
+	NewPartnerHandler = partner.NewPartnerHandler
 )

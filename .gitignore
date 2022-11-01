@@ -1,9 +1,15 @@
-.DS_Store
+# Ignore environment variable
 .env
+.air.*
+
+# Ignore OS Files
+.DS_Store
+
+# Ignore editor file
+.vscode
+.idea
+
+# Ignore auto generated file and folder
 tmp
 main
-.vscode
-cover.out
-.idea
-.air.*
-coverage.out
+*.out
