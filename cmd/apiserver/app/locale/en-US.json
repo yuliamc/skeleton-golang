@@ -4,7 +4,6 @@
     "ERROR_MSG_INTERNAL_SERVER_ERROR": "Internal server error",
     "ERROR_MSG_DATA_NOT_FOUND": "Data not found",
     "ERROR_MSG_INVALID_ENCRYPTION": "Invalid encryption",
-
     "ERROR_MSG_VALIDATION_VALUE": "Value ({{.Field}}) is invalid",
     "ERROR_MSG_VALIDATION_ALPHASPACE": "Field ({{.Field}}) only contains alphabet and space",
     "ERROR_MSG_VALIDATION_DATE": "Date ({{.Field}}) is invalid",
@@ -16,6 +15,6 @@
     "ERROR_MSG_VALIDATION_NUMERIC": "Field {{.Field}} must be in numeric",
     "ERROR_MSG_VALIDATION_URL": "Field {{.Field}} is not a valid URL",
     "ERROR_MSG_VALIDATION_LEN": "Field {{.Field}} must be {{.Length}} in length",
-
-    "MSG_CODE_INSERT_SUCCESS": "Succesfully insert data"
+    "MSG_CODE_INSERT_SUCCESS": "Succesfully insert data",
+    "MSG_CODE_NOTIFICATION_ACCEPTED": "Notification accepted successfully"
 }

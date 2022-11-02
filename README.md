@@ -58,7 +58,7 @@ VSCode extension
 [Rich Go language support for Visual Studio Code
 ](https://marketplace.visualstudio.com/items?itemName=golang.go)
 
-VSCode format/lint setting
+### VSCode format/lint setting
 
 ```json
   "go.formatTool": "goimports",
@@ -74,9 +74,13 @@ VSCode format/lint setting
   ],
 ```
 
-Hot Deploy
+### Hot Deploy
 
 [Golang Air live reload / hot deploy](https://github.com/cosmtrek/air)
+
+### Thunder Client
+
+VS Code Extension for local postman, import and export if needed.
 
 ## LICENSE
 

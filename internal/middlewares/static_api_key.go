@@ -8,7 +8,7 @@ import (
 
 // Generic header static API key validator middleware
 func StaticApiKey(apiKey *string) gin.HandlerFunc {
-	header := "Authorization"
+	header := "x-api-key"
 	return func(c *gin.Context) {
 		retrievedApiKey := c.Request.Header.Get(header)
 		if retrievedApiKey == "" || retrievedApiKey != *apiKey {

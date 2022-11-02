@@ -19,7 +19,6 @@ import (
 )
 
 // ResponseError construct an error (usually the error is GenericError).
-//
 func ResponseError(ctx *gin.Context, err error) {
 	if err != nil {
 		ctx.Errors = append(ctx.Errors, &gin.Error{Err: err})

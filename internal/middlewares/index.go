@@ -5,14 +5,21 @@ import (
 	"modalrakyat/skeleton-golang/pkg/clients/redis"
 )
 
-type MiddlewareAccess struct {
+type AccessMiddleware struct {
 	redisClient    redis.RedisDelegate
 	partnerService srvs.PartnerService
 }
 
-func NewMiddlewareAccess(redisClient redis.RedisDelegate, partnerService srvs.PartnerService) MiddlewareAccess {
-	return MiddlewareAccess{
+func NewAccessMiddleware(redisClient redis.RedisDelegate, partnerService srvs.PartnerService) AccessMiddleware {
+	return AccessMiddleware{
 		redisClient:    redisClient,
 		partnerService: partnerService,
 	}
+}
+
+type BackofficeAuthMiddleware struct {
+}
+
+func NewBackofficeAuthMiddleware() BackofficeAuthMiddleware {
+	return BackofficeAuthMiddleware{}
 }
