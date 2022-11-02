@@ -16,7 +16,12 @@ var (
 	redisClient redis.RedisDelegate
 
 	// hdrs
-	PartnerHandler *hdrs.PartnerHandler
+	BOAuthHandler     *hdrs.BOAuthHandler
+	BOAdminHandler    *hdrs.BOAdminHandler
+	MerchantCCHandler *hdrs.MerchantCCHandler
+	MerchantVAHandler *hdrs.MerchantVAHandler
+	PartnerHandler    *hdrs.PartnerHandler
+	CallbackHandler   *hdrs.CallbackHandler
 
 	// srvs
 	partnerService srvs.PartnerService
@@ -24,6 +29,10 @@ var (
 	// repos
 	partnerRepo repos.PartnerRepo
 	txRepo      repos.TxRepo
+
+	// middlewares
+	AccessMiddleware         middlewares.AccessMiddleware
+	BackofficeAuthMiddleware middlewares.BackofficeAuthMiddleware
 )
 
 // Init application global variable with single instance
@@ -47,6 +56,6 @@ func InitDI() {
 	PartnerHandler = hdrs.NewPartnerHandler(partnerService)
 
 	// middleware
-	middlewares.NewMiddlewareAccess(redisClient, partnerService)
-
+	AccessMiddleware = middlewares.NewAccessMiddleware(redisClient, partnerService)
+	BackofficeAuthMiddleware = middlewares.NewBackofficeAuthMiddleware()
 }

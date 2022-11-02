@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"modalrakyat/skeleton-golang/config"
 	"modalrakyat/skeleton-golang/internal/middlewares"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +16,6 @@ func Init(mode string) *gin.Engine {
 	r.Use(middlewares.AccessLog())
 	r.Use(middlewares.LanguageAccept())
 	r.Use(middlewares.Cors())
-	r.Use(middlewares.StaticApiKey(&config.Config.SecretKey.StaticApiKey))
 
 	// Setup pingpong
 	r.GET("/ping", func(c *gin.Context) {
@@ -26,9 +24,9 @@ func Init(mode string) *gin.Engine {
 		})
 	})
 
-	// Setup application route
-	appsRouteGroup := r.Group("/apps")
-	initApplicationRoute(appsRouteGroup)
+	initMerchantRoute(r.Group("/merchant"))
+	initBackofficeRoute(r.Group("/bo"))
+	initCallbackRoute(r.Group("/callback"))
 
 	return r
 }

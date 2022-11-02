@@ -6,12 +6,14 @@ import "modalrakyat/skeleton-golang/pkg/utils/constant"
 const (
 	MSG_CODE_NULL constant.ReserveMessageCode = iota + 20000
 	MSG_CODE_INSERT_SUCCESS
+	MSG_CODE_NOTIFICATION_ACCEPTED
 )
 
 // KEYS translate error code to i18n key
 var KEYS = map[constant.ReserveMessageCode]string{
-	MSG_CODE_NULL:           "MSG_CODE_NULL",
-	MSG_CODE_INSERT_SUCCESS: "MSG_CODE_INSERT_SUCCESS",
+	MSG_CODE_NULL:                  "MSG_CODE_NULL",
+	MSG_CODE_INSERT_SUCCESS:        "MSG_CODE_INSERT_SUCCESS",
+	MSG_CODE_NOTIFICATION_ACCEPTED: "MSG_CODE_NOTIFICATION_ACCEPTED",
 }
 
 func NewMessageCode(value string) int {
