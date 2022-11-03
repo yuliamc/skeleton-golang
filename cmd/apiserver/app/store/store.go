@@ -18,6 +18,7 @@ var (
 	// hdrs
 	BOAuthHandler     *hdrs.BOAuthHandler
 	BOAdminHandler    *hdrs.BOAdminHandler
+	BOConfigHandler   *hdrs.BOConfigHandler
 	MerchantCCHandler *hdrs.MerchantCCHandler
 	MerchantVAHandler *hdrs.MerchantVAHandler
 	PartnerHandler    *hdrs.PartnerHandler
@@ -54,6 +55,8 @@ func InitDI() {
 
 	// hdrs
 	PartnerHandler = hdrs.NewPartnerHandler(partnerService)
+	BOAdminHandler = hdrs.NewBOAdminHandler()
+	BOConfigHandler = hdrs.NewBOConfigHandler(redisClient)
 
 	// middleware
 	AccessMiddleware = middlewares.NewAccessMiddleware(redisClient, partnerService)

@@ -6,6 +6,7 @@ import "modalrakyat/skeleton-golang/pkg/utils/constant"
 const (
 	MSG_CODE_NULL constant.ReserveMessageCode = iota + 20000
 	MSG_CODE_INSERT_SUCCESS
+	MSG_CODE_DELETE_SUCCESS
 	MSG_CODE_NOTIFICATION_ACCEPTED
 )
 
@@ -13,6 +14,7 @@ const (
 var KEYS = map[constant.ReserveMessageCode]string{
 	MSG_CODE_NULL:                  "MSG_CODE_NULL",
 	MSG_CODE_INSERT_SUCCESS:        "MSG_CODE_INSERT_SUCCESS",
+	MSG_CODE_DELETE_SUCCESS:        "MSG_CODE_DELETE_SUCCESS",
 	MSG_CODE_NOTIFICATION_ACCEPTED: "MSG_CODE_NOTIFICATION_ACCEPTED",
 }
 

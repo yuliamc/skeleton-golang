@@ -20,4 +20,9 @@ func initBackofficeRoute(group *gin.RouterGroup) {
 	group.GET("/partner", store.PartnerHandler.GetList)
 	group.GET("/partner-detail/:id", store.PartnerHandler.GetByID)
 	group.POST("/partner", store.PartnerHandler.PostCreate)
+
+	// Config.
+	group.GET("/config", store.BOConfigHandler.GetConfig)
+	group.POST("/config", store.BOConfigHandler.PostConfig)
+	group.DELETE("/config", store.BOConfigHandler.DeleteConfig)
 }
